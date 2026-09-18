@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#192a29">
+<title>清水寺 · A walk above the maple canopy</title>
+<style>
+:root{color-scheme:dark;--paper:#f6f1e5;--muted:#c1c8bd;--line:#ffffff25;--accent:#eac38c}
+*{box-sizing:border-box}body{margin:0;overflow:hidden;background:#233b3d;color:var(--paper);font-family:"Segoe UI","Microsoft JhengHei",sans-serif}canvas#world{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+.veil{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#10232265,transparent 25%,transparent 66%,#0e212477)}
+header{position:fixed;left:38px;right:38px;top:29px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}.brand{font-size:11px;letter-spacing:3px;display:flex;gap:14px;align-items:center}.seal{border:1px solid #e9bb7b99;padding:7px 5px;color:var(--accent);font-family:serif;writing-mode:vertical-rl;font-size:13px;letter-spacing:3px}.meta{text-align:right;font-size:10px;letter-spacing:2px;line-height:1.9;color:#e3e9df}
+.title{position:fixed;left:40px;top:126px;pointer-events:none}.eyebrow{font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:13px}h1{font-family:"Yu Mincho","Noto Serif TC","PMingLiU",serif;font-weight:400;letter-spacing:14px;font-size:clamp(48px,5.5vw,82px);margin:0 0 13px;text-shadow:0 2px 25px #12262455}.subtitle{font-size:11px;letter-spacing:4px}.intro{font-size:12px;line-height:2;letter-spacing:1.5px;color:#e1e6da;margin-top:22px}
+.panel{position:fixed;right:32px;top:122px;width:176px;background:#142a2ed9;border:1px solid var(--line);border-radius:16px;padding:16px;backdrop-filter:blur(15px)}.panel-label{font-size:9px;color:var(--muted);letter-spacing:2px;margin:0 0 12px}.seg{display:flex;border:1px solid var(--line);border-radius:9px;padding:3px;gap:3px}button{font:inherit;cursor:pointer;touch-action:manipulation;color:var(--paper);border:0;background:transparent;transition:background .2s,color .2s;outline-offset:4px}button:focus-visible{outline:2px solid var(--accent)}.seg button{flex:1;border-radius:6px;padding:9px 0;font-size:11px}.seg button.active{background:var(--paper);color:#233a36}.rule{height:1px;background:var(--line);margin:17px 0}.view{display:block;width:100%;text-align:left;padding:10px 5px;font-size:11px;color:var(--muted)}.view span{color:#a8b8ab;margin-right:13px;font-size:9px}.view:hover,.view.active{color:var(--accent)}.walk{margin-top:12px;width:100%;padding:12px 4px;border:1px solid #dabd8d70;border-radius:8px;color:var(--accent);font-size:11px;letter-spacing:1px}.walk:hover{background:#dfbb8120}.quality{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:12px}.quality button{font-size:10px;color:var(--accent)}
+.caption{position:fixed;bottom:85px;left:40px;pointer-events:none;max-width:300px}.caption .n{font-size:10px;color:var(--accent);letter-spacing:2px}.caption h2{font-family:"PMingLiU",serif;font-size:21px;font-weight:400;letter-spacing:4px;margin:10px 0}.caption p{font-size:11px;line-height:1.9;color:#d0d8cc;margin:0;letter-spacing:1px}
+footer{position:fixed;bottom:25px;left:40px;right:36px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#e1e6dc;letter-spacing:1px;gap:15px}kbd{font:10px "Segoe UI",sans-serif;padding:3px 6px;border:1px solid #ffffff45;border-radius:4px;margin-right:4px}.help{display:flex;gap:18px;flex-wrap:wrap}.credit{font-size:9px;opacity:.7;text-align:right}a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);padding:12px 20px;background:#13282ee8;border:1px solid var(--line);border-radius:10px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s;max-width:90%;text-align:center}#toast.show{opacity:1}
+#crosshair{position:fixed;left:50%;top:50%;width:5px;height:5px;border:1px solid #fff;border-radius:50%;display:none;pointer-events:none}body.walking #crosshair{display:block}body.walking .title,body.walking .caption{display:none}body.walking .panel{opacity:.85}
+#loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:10;background:#1a3034;transition:opacity .6s}.loaderbox{text-align:center;padding:30px;max-width:460px}.loaderbox b{display:block;font-family:serif;font-size:40px;font-weight:400;letter-spacing:12px;margin:18px}.loaderbox p{font-size:12px;color:#c4ccbf;line-height:2}.spinner{width:32px;height:32px;border:1px solid #ffffff20;border-top-color:#e8c491;border-radius:50%;margin:auto;animation:spin 1.4s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#retry{border:1px solid #fff5;padding:10px 20px;border-radius:8px}
+.compass{position:fixed;bottom:100px;right:52px;width:44px;height:44px;border:1px solid #fff5;border-radius:50%;display:grid;place-items:center;font-size:9px;pointer-events:none}.compass:before{content:'N';position:absolute;top:-15px;color:var(--accent)}#needle{font-size:21px;color:#e6d6b8}
+@media(max-width:700px){header{left:20px;right:20px;top:18px}.meta{font-size:8px}.brand{font-size:9px;letter-spacing:2px}.title{left:22px;top:100px}h1{font-size:48px;letter-spacing:9px}.intro{display:none}.panel{right:14px;top:110px;width:140px;padding:11px}.caption{left:22px;bottom:112px;max-width:230px}.caption p{font-size:10px}.compass{display:none}footer{left:22px;right:18px;bottom:20px;align-items:flex-end}.help{gap:9px;max-width:235px;line-height:1.8}.credit{max-width:100px;font-size:8px}.subtitle{font-size:9px;letter-spacing:2px}.view{padding:8px 2px}.view span{margin-right:8px}.panel-label{font-size:8px}.walk{font-size:10px}.quality{font-size:9px}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head>
+<body>
+<canvas id="world" aria-label="清水寺三維互動場景，拖曳旋轉、滾輪縮放" tabindex="0"></canvas><div class="veil"></div>
+<header><div class="brand"><span class="seal">京都</span> JAPAN / SPATIAL STUDIES</div><div class="meta">34°59′41″N &nbsp; 135°47′06″E<br>HIGASHIYAMA, KYOTO</div></header>
+<div class="title"><div class="eyebrow">音羽山 · 秋の風景</div><h1>清水寺</h1><div class="subtitle">KIYOMIZU-DERA</div><p class="intro">山色入簷，木舞台懸於秋林。<br>在京都的光影之間，慢慢走一段。</p></div>
+<aside class="panel" aria-label="場景控制"><p class="panel-label">LIGHT & ATMOSPHERE</p><div class="seg"><button id="day" class="active" aria-pressed="true">☀ 日景</button><button id="night" aria-pressed="false">☾ 夜楓</button></div><div class="rule"></div><p class="panel-label">EXPLORE THE TEMPLE</p><button class="view active" data-view="0"><span>01</span>經典全景</button><button class="view" data-view="1"><span>02</span>清水舞台</button><button class="view" data-view="2"><span>03</span>懸造木構</button><button class="view" data-view="3"><span>04</span>三重塔</button><button id="walk" class="walk">⤢ &nbsp; 進入第一人稱</button><div class="quality"><span>畫質</span><button id="quality" aria-label="切換畫質">精緻 ↗</button></div></aside>
+<div class="caption"><div class="n" id="scene-number">01 / THE AUTUMN SANCTUARY</div><h2 id="scene-title">懸於山林之上的寺院</h2><p id="scene-desc">曲面大屋簷、層層貫木與秋色。<br>拖曳視角，探索山寺的另一面。</p></div>
+<div class="compass"><span id="needle">↑</span></div><div id="crosshair"></div><div id="toast" role="status" aria-live="polite"></div>
+<footer><div class="help" id="help"><span><kbd>拖曳</kbd>環視</span><span><kbd>滾輪</kbd>縮放</span><span><kbd>右鍵</kbd>平移</span><span><kbd>N</kbd>日夜</span></div><div class="credit">程序建模・藝術化重現<br><a href="https://www.kiyomizudera.or.jp/en/learn/" target="_blank" rel="noopener">建築參考：清水寺官方 ↗</a></div></footer>
+<div id="loading"><div class="loaderbox"><div class="spinner"></div><b>清水寺</b><p id="loadtext">正在構築木舞台與秋日山林…<br>首次開啟需連線載入 Three.js</p><button id="retry" hidden onclick="location.reload()">重新載入</button></div></div>
+<script>
+window.showLoadError=function(message){document.querySelector('.spinner').style.display='none';document.getElementById('loadtext').textContent=message;document.getElementById('retry').hidden=false;document.getElementById('loading').style.display='flex';document.getElementById('loading').style.opacity='1'};
+window.loadTimer=setTimeout(()=>{if(!window.sceneReady)showLoadError('載入時間較長，請確認網路與 CDN 連線，再按重新載入。');},25000);
+</script>
+<script type="module">
+// Single-file, deterministic procedural scene. No external models, textures or fonts.
+// Artistic interpretation based on https://www.kiyomizudera.or.jp/en/learn/ .
+// Coordinates: +Y up, +Z stage front; main stage walking surface Y=14.2.
+try {
+const THREE=await import('three');
+const {OrbitControls}=await import('three/addons/controls/OrbitControls.js');
+const $=id=>document.getElementById(id), canvas=$('world');
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0xbcc6b2,.0038);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;
+const camera=new THREE.PerspectiveCamera(43,innerWidth/innerHeight,.1,1100);
+const controls=new OrbitControls(camera,canvas);controls.enableDamping=true;controls.dampingFactor=.065;
+controls.minDistance=5;controls.maxDistance=180;controls.maxPolarAngle=Math.PI*.485;controls.target.set(0,15,0);
+controls.enablePan=true;controls.panSpeed=.7;controls.zoomSpeed=.8;
+let seed=7241;function rand(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}
+const mix=THREE.MathUtils.lerp,clamp=THREE.MathUtils.clamp;
+function texture(kind){const c=document.createElement('canvas');c.width=256;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle=kind==='wood'?'#ad9169':'#706d60';ctx.fillRect(0,0,256,256);for(let i=0;i<2400;i++){const n=rand();ctx.strokeStyle=`rgba(${n>.5?'240,219,171':'35,30,23'},${.03+rand()*.14})`;ctx.lineWidth=.3+rand()*1.5;ctx.beginPath();const x=rand()*256,y=rand()*256;ctx.moveTo(x,y);ctx.lineTo(x+(kind==='wood'?rand()*110:rand()*5),y+rand()*2);ctx.stroke()}const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.anisotropy=4;return tex}
+const grain=texture('wood'),rockTex=texture('stone');
+function mat(color,extra={}){return new THREE.MeshStandardMaterial({color,roughness:.88,...extra})}
+const timber=mat(0x69472b,{map:grain}),endgrain=mat(0x99714b,{map:grain}),darkwood=mat(0x382b22,{map:grain}),deckmats=Array.from({length:5},(_,i)=>mat(new THREE.Color().setHSL(.09,.23,.28+i*.024),{map:grain}));
+const roofmat=mat(0x383a33,{map:grain}),roofedge=mat(0x655a45),plaster=mat(0xd5c8a9),red=mat(0xa63a22),redlight=mat(0xce5a34),stone=mat(0x827d70,{map:rockTex}),gold=mat(0xb99651,{metalness:.55,roughness:.4});
+const unitBox=new THREE.BoxGeometry(1,1,1),unitCylinder=new THREE.CylinderGeometry(1,1,1,10),sphereGeo=new THREE.IcosahedronGeometry(1,1),batches=new Map(),dummy=new THREE.Object3D();
+function instance(geometry,material,p,s,rotation){const key=geometry.uuid+material.uuid;if(!batches.has(key))batches.set(key,{geometry,material,transforms:[]});dummy.position.set(...p);dummy.scale.set(...s);dummy.rotation.set(...(rotation||[0,0,0]));dummy.updateMatrix();batches.get(key).transforms.push(dummy.matrix.clone())}
+function box(x,y,z,w,h,d,m=timber,ry=0){instance(unitBox,m,[x,y,z],[w,h,d],[0,ry,0])}
+function cyl(x,y,z,r,h,m=timber){instance(unitCylinder,m,[x,y,z],[r,h,r])}
+function beam(a,b,r,m=timber){const va=new THREE.Vector3(...a),vb=new THREE.Vector3(...b),mid=va.clone().add(vb).multiplyScalar(.5);dummy.position.copy(mid);dummy.scale.set(r,va.distanceTo(vb),r);dummy.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),vb.sub(va).normalize());dummy.updateMatrix();const key=unitBox.uuid+m.uuid;if(!batches.has(key))batches.set(key,{geometry:unitBox,material:m,transforms:[]});batches.get(key).transforms.push(dummy.matrix.clone())}
+function mesh(geo,m,x=0,y=0,z=0){const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o}
+function terrainY(x,z){return 2+12/(1+Math.exp((z+8)/6)) + Math.sin(x*.047+z*.03)*1.3+Math.sin(z*.08)*.7}
+const groundGeo=new THREE.PlaneGeometry(340,300,110,100);groundGeo.rotateX(-Math.PI/2);const gp=groundGeo.attributes.position,colors=[];
+for(let i=0;i<gp.count;i++){const x=gp.getX(i),z=gp.getZ(i);gp.setY(i,terrainY(x,z)-.15);const c=new THREE.Color().setHSL(.19+rand()*.025,.19+rand()*.12,.23+rand()*.06);colors.push(c.r,c.g,c.b)}groundGeo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));groundGeo.computeVertexNormals();mesh(groundGeo,mat(0xffffff,{vertexColors:true}));
+// Mountain silhouettes, each an actual continuous ridgeline.
+for(let layer=0;layer<3;layer++){const verts=[],inds=[],z=-155-layer*85;for(let i=0;i<=60;i++){const x=-410+i*14;const h=34+layer*16+Math.sin(i*.23+layer*1.7)*16+Math.sin(i*.49)*7+rand()*4;verts.push(x,-5,z,x,h,z)}for(let i=0;i<60;i++){const a=i*2;inds.push(a,a+1,a+2,a+1,a+3,a+2)}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setIndex(inds);g.computeVertexNormals();mesh(g,mat([0x667f70,0x83978a,0x9eada0][layer],{side:THREE.DoubleSide}))}
+// Main wooden stage, individual boards, joists and penetrating timber rails.
+const floorY=14.2;box(0,13.82,4,35,.65,36,darkwood);
+for(let x=-17.1;x<17.5;x+=.57)box(x,14.04,4,.535,.3,36,deckmats[Math.floor(rand()*5)]);
+for(let x=-16;x<=16;x+=4){box(x,13.23,4,.6,.75,36,timber);for(let z=-11;z<=21;z+=4){const base=Math.min(terrainY(x,z),12.3);cyl(x,base+.19,z,.65,.38,stone);cyl(x,(base+13.55)/2,z,.35,13.55-base,timber);box(x,13.05,z,1.25,.4,.9,endgrain)}}
+for(let z=-7;z<=21;z+=4)for(let y=5;y<=12;y+=3.25){box(0,y,z,33,.34,.4,endgrain);for(let x=-16;x<=16;x+=4)box(x,y+.42,6,.38,.32,31,timber)}
+for(let x=-16;x<=16;x+=4)for(let z=9;z<21;z+=4)beam([x,5.2,z],[x,8.5,z+4],.19,darkwood);
+// Railing with finials and closely spaced vertical balusters.
+function railing(a,b,y,material=timber){const dist=Math.hypot(b[0]-a[0],b[1]-a[1]);const count=Math.ceil(dist/2.3);for(let i=0;i<=count;i++){const x=mix(a[0],b[0],i/count),z=mix(a[1],b[1],i/count);box(x,y+.66,z,.24,1.5,.24,material);cyl(x,y+1.49,z,.2,.13,endgrain);instance(sphereGeo,gold,[x,y+1.6,z],[.12,.12,.12])}for(const h of [.28,.95,1.33])beam([a[0],y+h,a[1]],[b[0],y+h,b[1]],h===1.33?.22:.13,material);for(let i=1;i<dist/.65;i++){const t=i/(dist/.65);box(mix(a[0],b[0],t),y+.6,mix(a[1],b[1],t),.085,.62,.085,material)}}
+railing([-17,21.7],[17,21.7],floorY);railing([-17,10],[-17,21.7],floorY);railing([17,10],[17,21.7],floorY);
+// Main hall: colonnade, bracket complexes, lattice screens and raised sanctuary.
+const obstacles=[];
+for(let x=-15;x<=15;x+=5)for(const z of [-11,-4,9]){cyl(x,17.4,z,.31,6.4,timber);obstacles.push({x,z,r:.63});box(x,15,z,.7,.12,.7,darkwood);for(let k=0;k<3;k++){box(x,20+k*.37,z,.95+k*.55,.27,.72,endgrain);box(x,20.18+k*.37,z,.58,.25,1+k*.5,timber)}}
+for(const z of [-11,-4,9]){box(0,19.65,z,32,.4,.43,timber);box(0,21.02,z,33,.42,.48,timber)}
+for(let x=-15;x<=15;x+=5)box(x,20.2,-1,.45,.5,23,timber);
+box(0,16.1,-11.1,31,3.8,.24,plaster);box(0,14.55,-6.9,29,.7,7.5,darkwood);
+// The sanctuary is a solid collision region, open front veranda remains walkable.
+for(let x=-14.75;x<=14.8;x+=.35)box(x,17.4,-4,.085,4.8,.18,darkwood);
+for(const y of [15.3,16.5,18.1,19.55])box(0,y,-4,30,.13,.25,timber);
+for(const x of [-15.1,15.1]){box(x,16.4,-7.5,.25,4.2,7,plaster);for(let z=-10.8;z<-4;z+=.4)box(x*1.01,17,z,.09,4,.07,darkwood)}
+box(0,18.9,-3.8,5.2,.45,.35,red);box(0,17.3,-8,4,3.8,.2,gold);
+// Hip roof: ring surface with curved slope, raised corners and layered eaves.
+function roof(cx,cy,cz,w,d,h,ridge,m=roofmat,detail=true){
+ function pt(t,s,u){const rx=mix(w/2,ridge/2,t),rz=d/2*(1-t);const corners=[[-1,-1],[1,-1],[1,1],[-1,1]];const a=corners[s],b=corners[(s+1)%4];const px=mix(a[0],b[0],u),pz=mix(a[1],b[1],u);const lift=.6*Math.exp(-t*15)*(Math.pow(Math.abs(px*pz),5)+.25);return[cx+px*rx,cy+h*Math.pow(t,1.55)+lift,cz+pz*rz]}
+ const vertices=[],uv=[],indices=[],rows=22,cols=28;
+ for(let s=0;s<4;s++){const offset=vertices.length/3;for(let j=0;j<=rows;j++)for(let i=0;i<=cols;i++){vertices.push(...pt(j/rows,s,i/cols));uv.push(i/cols*4,j/rows*2)}for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const a=offset+j*(cols+1)+i;indices.push(a,a+cols+1,a+1,a+1,a+cols+1,a+cols+2)}}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();const rm=m.clone();rm.side=THREE.DoubleSide;mesh(g,rm);
+ for(let s=0;s<4;s++){for(let i=0;i<cols;i++){const a=pt(0,s,i/cols),b=pt(0,s,(i+1)/cols);beam(a,b,.22,roofedge);const a2=[...a],b2=[...b];a2[1]-=.28;b2[1]-=.28;beam(a2,b2,.23,darkwood)}if(detail)for(let j=1;j<18;j++){const t=j/20;for(let i=0;i<14;i++){const a=pt(t,s,i/14),b=pt(t,s,(i+1)/14);a[1]+=.026;b[1]+=.026;beam(a,b,.045,roofedge)}}for(let i=0;i<=20;i++){const a=pt(.01,s,i/20),b=pt(.15,s,i/20);a[1]-=.34;b[1]-=.34;beam(a,b,.13,endgrain)}}
+ beam([cx-ridge/2-.45,cy+h+.13,cz],[cx+ridge/2+.45,cy+h+.13,cz],.42,roofedge);
+ for(const sign of [-1,1]){beam([cx+sign*(ridge/2-.3),cy+h+.13,cz],[cx+sign*(ridge/2+.8),cy+h+.65,cz],.23,roofedge)}
+}
+roof(0,21.5,-1,40,30,8.5,18);
+// Gabled upper-end ornament and curved entrance canopy (karahafu-inspired).
+for(const side of [-1,1]){const x=side*12.8;for(let i=-5;i<=5;i++){const z=i*.65;beam([x,25,z-1],[x,28.35-Math.abs(i)*.45,z-1],.1,endgrain)}}
+function canopy(){const v=[],ind=[];const N=40;for(let i=0;i<=N;i++){const x=-6+12*i/N;const y=21.9+2.25*Math.exp(-x*x/7)+.3*Math.pow(Math.abs(x)/6,6);v.push(x,y,10,x,y-.65,15);if(i<N){const a=i*2;ind.push(a,a+1,a+2,a+1,a+3,a+2)}if(i>0){const px=-6+12*(i-1)/N,py=21.9+2.25*Math.exp(-px*px/7)+.3*Math.pow(Math.abs(px)/6,6);beam([px,py-.65,15],[x,y-.65,15],.27,roofedge);beam([px,py-.96,15],[x,y-.96,15],.12,endgrain)}if(i%3===0)beam([x,21.2,14.8],[x,y-.95,14.8],.09,timber)}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(ind);g.computeVertexNormals();mesh(g,mat(0x353830,{side:THREE.DoubleSide}));}
+canopy();
+// Plaque is drawn locally to avoid external assets or font dependencies.
+const plaqueCanvas=document.createElement('canvas');plaqueCanvas.width=512;plaqueCanvas.height=160;const pc=plaqueCanvas.getContext('2d');pc.fillStyle='#29271e';pc.fillRect(0,0,512,160);pc.strokeStyle='#b3985a';pc.lineWidth=10;pc.strokeRect(10,10,492,140);pc.fillStyle='#d7bc7f';pc.textAlign='center';pc.textBaseline='middle';pc.font='82px serif';pc.fillText('清 水 寺',256,86);const plaqueTex=new THREE.CanvasTexture(plaqueCanvas);plaqueTex.colorSpace=THREE.SRGBColorSpace;mesh(new THREE.PlaneGeometry(3.8,1.18),mat(0xffffff,{map:plaqueTex}),0,20.1,9.3);
+// Western approach, compact three-tier pagoda and ceremonial gate.
+box(-31,13.5,-7,27,.8,16,stone);box(-21,13.93,4,8,.3,6,deckmats[2]);railing([-25,7],[-17,7],14.1);
+function pagoda(x,z){const base=14;box(x,base-.1,z,10,.8,10,stone);for(let level=0;level<3;level++){const y=base+level*5.2,size=7.8-level*1.1;box(x,y+1.85,z,size,3.7,size,plaster);for(const a of [-1,1])for(const b of [-1,1])cyl(x+a*(size/2-.12),y+2,z+b*(size/2-.12),.24,4.3,red);for(const a of [-1,1]){box(x,y+3.5,z+a*size/2,size+.7,.4,.3,red);box(x+a*size/2,y+3.5,z,.3,.4,size+.7,red);for(let k=-2;k<=2;k++){box(x+k*size/6,y+2,z+a*(size/2+.02),.12,2,.1,redlight);box(x+a*(size/2+.02),y+2,z+k*size/6,.1,2,.12,redlight)}}roof(x,y+3.7,z,size+5,size+5,2.7,1.5,roofmat,false);railing([x-size/2-1,z+size/2+.9],[x+size/2+1,z+size/2+.9],y+.4,red)}cyl(x,34.7,z,.13,7,gold);for(let i=0;i<9;i++){const ring=new THREE.TorusGeometry(.65-i*.045,.07,6,24);const ob=mesh(ring,gold,x,32.1+i*.55,z);ob.rotation.x=Math.PI/2}instance(sphereGeo,gold,[x,38.5,z],[.22,.4,.22])}
+pagoda(-35,-11);
+for(const x of [-46,-39]){cyl(x,17,-.5,.42,6,red);box(x,14.3,-.5,1,.5,1,stone)}box(-42.5,19.2,-.5,10,.55,1,red);roof(-42.5,19.5,-.5,12,6,3,6,roofmat,false);
+// Stone approach descending along the hillside, plus tōrō lanterns.
+for(let i=0;i<20;i++)box(-46-i*.7,13.8-i*.27,5+i*.65,6,.3,1.2,stone);
+const lanternMaterial=mat(0xffdc94,{emissive:0xffab48,emissiveIntensity:0});const lanternLights=[],glows=[];
+const glowCanvas=document.createElement('canvas');glowCanvas.width=64;glowCanvas.height=64;const gc=glowCanvas.getContext('2d'),grad=gc.createRadialGradient(32,32,1,32,32,32);grad.addColorStop(0,'rgba(255,212,136,.8)');grad.addColorStop(.2,'rgba(255,177,66,.25)');grad.addColorStop(1,'rgba(255,130,24,0)');gc.fillStyle=grad;gc.fillRect(0,0,64,64);const glowTexture=new THREE.CanvasTexture(glowCanvas);
+function lantern(x,y,z,standing=false,light=false){if(standing){box(x,y+.14,z,.95,.28,.95,stone);cyl(x,y+.9,z,.19,1.5,stone);y+=1.8}beam([x,y+.65,z],[x,y+1.4,z],.055,darkwood);cyl(x,y,z,.3,.86,lanternMaterial);cyl(x,y-.48,z,.36,.13,darkwood);cyl(x,y+.48,z,.36,.13,darkwood);for(let k=0;k<8;k++){const a=k/8*Math.PI*2;beam([x+Math.cos(a)*.3,y-.42,z+Math.sin(a)*.3],[x+Math.cos(a)*.3,y+.42,z+Math.sin(a)*.3],.025,timber)}const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,color:0xffb76f,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));sp.position.set(x,y,z);sp.scale.set(4,4,1);scene.add(sp);glows.push(sp);if(light){const l=new THREE.PointLight(0xffb365,0,12,2);l.position.set(x,y,z+.35);scene.add(l);lanternLights.push(l)}}
+for(let x=-12.5;x<=12.5;x+=5)lantern(x,18.65,9.6,false,true);
+for(const x of [-15.8,15.8])for(const z of [13,20])lantern(x,14.2,z,true,z===20);
+for(const x of [-27,-43])lantern(x,14,-1,true,false);
+const warmWash=new THREE.SpotLight(0xffb261,0,90,.65,.7,1.5);warmWash.position.set(-8,7,39);warmWash.target.position.set(0,20,2);scene.add(warmWash,warmWash.target);
+const pagodaWash=new THREE.PointLight(0xffa252,0,38,2);pagodaWash.position.set(-30,22,0);scene.add(pagodaWash);
+// Autumn canopy. Seeded instancing keeps thousands of foliage forms inexpensive.
+const leaves=[0x8e3826,0xba4928,0xd07831,0xb3a44e,0x52684a,0x6b773e,0x923025].map(c=>mat(c,{flatShading:true}));
+function tree(x,z,size){const y=terrainY(x,z),height=size*(.85+rand()*.35);cyl(x,y+height*.44,z,.15+size*.026,height*.87,darkwood);for(let j=0;j<3;j++){const a=j*2.1+rand();beam([x,y+height*.42,z],[x+Math.cos(a)*size*.5,y+height*.88,z+Math.sin(a)*size*.5],.11+size*.015,timber)}const color=Math.floor(rand()*leaves.length);for(let j=0;j<9;j++){const a=rand()*Math.PI*2,r=Math.sqrt(rand())*size*.56;instance(sphereGeo,leaves[(color+(rand()>.83?1:0))%leaves.length],[x+Math.cos(a)*r,y+height+rand()*size*.34,z+Math.sin(a)*r],[size*(.39+rand()*.13),size*(.28+rand()*.13),size*(.38+rand()*.12)],[rand(),rand()*6,rand()])}}
+for(let i=0;i<270;i++){const x=(rand()-.5)*210,z=(rand()-.5)*150;if(x>-54&&x<25&&z>-27&&z<31)continue;if(Math.abs(x)<29&&z<50&&z>12)continue;tree(x,z,3.5+rand()*4.5)}
+for(const p of [[-26,28,5.6],[27,19,6],[35,37,6.8],[-38,35,6],[22,-30,7],[-23,-31,7],[12,48,4.6],[-9,60,6],[50,2,8],[-55,26,7]])tree(...p);
+for(let i=0;i<65;i++){const x=(rand()-.5)*120,z=20+rand()*75;instance(sphereGeo,stone,[x,terrainY(x,z),z],[.4+rand()*1.3,.4+rand(),.4+rand()*1.3],[rand(),rand(),rand()])}
+// Distant Kyoto rooftops, softened by atmospheric perspective.
+const cityMat=mat(0x8b9383);for(let i=0;i<110;i++){const x=-90-rand()*100,z=-5+rand()*120;const h=1+rand()*4;box(x,terrainY(x,z)+h/2,z,2+rand()*3,h,2+rand()*3,cityMat)}
+for(const b of batches.values()){const ob=new THREE.InstancedMesh(b.geometry,b.material,b.transforms.length);b.transforms.forEach((m,i)=>ob.setMatrixAt(i,m));ob.castShadow=true;ob.receiveShadow=true;ob.computeBoundingSphere();scene.add(ob)}
+// Gradient skydome; no texture fetches. Uniform interpolates day/night smoothly.
+const skyUniforms={night:{value:0}};const sky=mesh(new THREE.SphereGeometry(600,32,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:skyUniforms,vertexShader:'varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',fragmentShader:'varying vec3 vPos;uniform float night;void main(){float h=clamp(normalize(vPos).y,0.0,1.0);vec3 day=mix(vec3(.84,.85,.73),vec3(.28,.53,.61),pow(h,.55));vec3 dark=mix(vec3(.105,.15,.22),vec3(.012,.024,.065),pow(h,.45));gl_FragColor=vec4(mix(day,dark,night),1.0);}'}));sky.castShadow=false;sky.receiveShadow=false;
+const hemi=new THREE.HemisphereLight(0xe4f1ff,0x756b40,2.4);scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xffe3b0,3.3);sun.position.set(-45,80,55);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-65,right:55,top:65,bottom:-50,near:1,far:210});sun.shadow.bias=-.00025;sun.shadow.normalBias=.09;sun.shadow.camera.updateProjectionMatrix();scene.add(sun);
+const fill=new THREE.DirectionalLight(0xa9cce2,.65);fill.position.set(45,35,-35);scene.add(fill);
+const moon=mesh(new THREE.SphereGeometry(5.5,24,16),new THREE.MeshBasicMaterial({color:0xf2e4c0}),-90,130,-240);moon.castShadow=false;moon.visible=false;
+const starPositions=[];for(let i=0;i<650;i++){const a=rand()*Math.PI*2,y=.17+rand()*.81,r=Math.sqrt(1-y*y);starPositions.push(Math.cos(a)*r*480,y*480,Math.sin(a)*r*480)}const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));const stars=new THREE.Points(sg,new THREE.PointsMaterial({color:0xf0e8d8,size:.8,transparent:true,opacity:0,depthWrite:false}));scene.add(stars);
+// Falling maple fragments, subtle in daylight and fireflies at night.
+const particlePos=new Float32Array(100*3),particleSpeed=[];for(let i=0;i<100;i++){particlePos[i*3]=(rand()-.5)*85;particlePos[i*3+1]=6+rand()*29;particlePos[i*3+2]=rand()*60;particleSpeed.push(.2+rand()*.5)}const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(particlePos,3));const particles=new THREE.Points(pg,new THREE.PointsMaterial({color:0xd7a755,size:.12,transparent:true,opacity:.7}));scene.add(particles);
+let nightTarget=0,nightAmount=0,walking=false,dragLook=false,yaw=0,pitch=0,transition=null,lowQuality=false,toastTimer;
+const keys=new Set(),views=[
+ {p:[64,46,82],t:[-4,15,0],title:'懸於山林之上的寺院',n:'01 / THE AUTUMN SANCTUARY',desc:'曲面大屋簷、層層貫木與秋色。<br>拖曳視角，探索山寺的另一面。'},
+ {p:[25,24,40],t:[0,17,7],title:'清水舞台',n:'02 / THE WOODEN STAGE',desc:'沿著木板與欄杆，走近本堂。<br>切換第一人稱，親自踏上舞台。'},
+ {p:[31,9,43],t:[0,9,13],title:'懸造 · 木的秩序',n:'03 / THE TIMBER STRUCTURE',desc:'高柱、橫梁與層疊貫木。<br>從山坡下仰望舞台的支撐結構。'},
+ {p:[-63,34,34],t:[-33,25,-9],title:'朱紅三重塔',n:'04 / THE VERMILION PAGODA',desc:'三層出簷，朱紅映著山色。<br>夜幕降下時，燈火沿簷點亮。'}];
+camera.position.set(...views[0].p);controls.target.set(...views[0].t);controls.update();
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),4200)}
+function setNight(value){nightTarget=value;$('day').classList.toggle('active',!value);$('night').classList.toggle('active',!!value);$('day').setAttribute('aria-pressed',String(!value));$('night').setAttribute('aria-pressed',String(!!value))}
+$('day').onclick=()=>setNight(0);$('night').onclick=()=>setNight(1);
+function setView(i,animate=true){if(walking)exitWalk();const v=views[i];transition=animate?{start:performance.now(),p:camera.position.clone(),t:controls.target.clone(),endP:new THREE.Vector3(...v.p),endT:new THREE.Vector3(...v.t)}:null;if(!animate){camera.position.set(...v.p);controls.target.set(...v.t)}document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',+b.dataset.view===i));$('scene-title').textContent=v.title;$('scene-number').textContent=v.n;$('scene-desc').innerHTML=v.desc}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>setView(+b.dataset.view));controls.addEventListener('start',()=>transition=null);
+function requestLock(){if(!canvas.requestPointerLock){toast('目前使用拖曳視角模式：按住場景拖曳，搭配 WASD 行走。');return}try{const promise=canvas.requestPointerLock();if(promise?.catch)promise.catch(()=>toast('滑鼠鎖定未啟用；按住場景拖曳仍可轉頭，WASD 行走。'))}catch{toast('請按住場景拖曳轉頭，搭配 WASD 行走。')}}
+function enterWalk(){walking=true;transition=null;controls.enabled=false;camera.position.set(8,15.88,19);yaw=.1;pitch=0;camera.rotation.order='YXZ';camera.rotation.set(pitch,yaw,0);document.body.classList.add('walking');$('walk').textContent='↩ 退出第一人稱';$('help').innerHTML='<span><kbd>W A S D</kbd>行走</span><span><kbd>滑鼠</kbd>轉頭</span><span><kbd>Shift</kbd>加速</span><span><kbd>Esc</kbd>退出</span>';keys.clear();canvas.focus();requestLock();toast('已站上清水舞台。WASD 行走、滑鼠轉頭；Esc 回到環視。')}
+function exitWalk(){walking=false;dragLook=false;keys.clear();if(document.pointerLockElement===canvas)document.exitPointerLock();document.body.classList.remove('walking');$('walk').textContent='⤢ 進入第一人稱';$('help').innerHTML='<span><kbd>拖曳</kbd>環視</span><span><kbd>滾輪</kbd>縮放</span><span><kbd>右鍵</kbd>平移</span><span><kbd>N</kbd>日夜</span>';controls.enabled=true;camera.up.set(0,1,0);setView(1,false);controls.update()}
+$('walk').onclick=()=>walking?exitWalk():enterWalk();
+document.addEventListener('pointerlockchange',()=>{if(walking&&document.pointerLockElement!==canvas){exitWalk();toast('已回到環視模式。')}});
+document.addEventListener('pointerlockerror',()=>{if(walking)toast('可按住場景拖曳轉頭，WASD 繼續行走。')});
+canvas.addEventListener('pointerdown',e=>{if(walking){dragLook=true;canvas.setPointerCapture(e.pointerId)}});canvas.addEventListener('pointerup',()=>dragLook=false);canvas.addEventListener('pointercancel',()=>dragLook=false);
+document.addEventListener('mousemove',e=>{if(walking&&(document.pointerLockElement===canvas||dragLook)){yaw-=e.movementX*.002;pitch=clamp(pitch-e.movementY*.002,-1.3,1.3);camera.rotation.set(pitch,yaw,0)}});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{if(e.code==='KeyN'&&!e.repeat)setNight(1-nightTarget);if(e.code==='Escape'&&walking)exitWalk();if(walking&&['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','ShiftLeft','ShiftRight'].includes(e.code)){e.preventDefault();keys.add(e.code)}});document.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>{keys.clear();dragLook=false});document.addEventListener('visibilitychange',()=>keys.clear());
+// A walkable union of deck, west bridge and pagoda forecourt; X/Z sliding collisions.
+function canWalk(x,z){const deck=x>-16.45&&x<16.45&&z>-2.9&&z<21.1;const bridge=x>=-25&&x<=-16&&z>1.5&&z<6.4;const court=x>-44&&x<-18&&z>-3.4&&z<.3;const connector=x>-25&&x<-18&&z>-.2&&z<6.4;if(!(deck||bridge||court||connector))return false;for(const ob of obstacles)if(Math.hypot(x-ob.x,z-ob.z)<ob.r)return false;for(const lx of [-15.8,15.8])for(const lz of [13,20])if(Math.hypot(x-lx,z-lz)<.7)return false;for(const lx of [-27,-43])if(Math.hypot(x-lx,z+1)<.7)return false;return true}
+function moveWalk(dt){let f=Number(keys.has('KeyW')||keys.has('ArrowUp'))-Number(keys.has('KeyS')||keys.has('ArrowDown'));let r=Number(keys.has('KeyD')||keys.has('ArrowRight'))-Number(keys.has('KeyA')||keys.has('ArrowLeft'));if(!f&&!r)return;const norm=Math.hypot(f,r);f/=norm;r/=norm;const speed=(keys.has('ShiftLeft')||keys.has('ShiftRight')?5:2.6)*dt;const dx=(-Math.sin(yaw)*f+Math.cos(yaw)*r)*speed,dz=(-Math.cos(yaw)*f-Math.sin(yaw)*r)*speed;const steps=Math.max(1,Math.ceil(speed/.08));for(let i=0;i<steps;i++){if(canWalk(camera.position.x+dx/steps,camera.position.z))camera.position.x+=dx/steps;if(canWalk(camera.position.x,camera.position.z+dz/steps))camera.position.z+=dz/steps}camera.position.y=15.88}
+$('quality').onclick=()=>{lowQuality=!lowQuality;renderer.setPixelRatio(Math.min(devicePixelRatio,lowQuality?1:1.65));renderer.shadowMap.enabled=!lowQuality;scene.traverse(o=>{if(o.material){const materials=Array.isArray(o.material)?o.material:[o.material];for(const m of materials)m.needsUpdate=true}});$('quality').textContent=lowQuality?'流暢 ↗':'精緻 ↗'};
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();showLoadError('顯示卡連線已中斷，請重新載入場景。')});
+let prev=performance.now(),elapsed=0;const dayFog=new THREE.Color(0xbcc6b2),nightFog=new THREE.Color(0x142331),daySun=new THREE.Color(0xffe3b0),nightSun=new THREE.Color(0x9bb8ed);
+function animate(now){requestAnimationFrame(animate);const dt=Math.min((now-prev)/1000,.05);prev=now;elapsed+=dt;
+ if(walking)moveWalk(dt);else {if(transition){const t=clamp((now-transition.start)/1600,0,1),e=t*t*(3-2*t);camera.position.lerpVectors(transition.p,transition.endP,e);controls.target.lerpVectors(transition.t,transition.endT,e);if(t===1)transition=null}controls.update()}
+ nightAmount=mix(nightAmount,nightTarget,1-Math.exp(-dt*2.5));skyUniforms.night.value=nightAmount;scene.fog.color.lerpColors(dayFog,nightFog,nightAmount);scene.fog.density=mix(.0038,.005,nightAmount);
+ hemi.intensity=mix(2.4,.68,nightAmount);sun.intensity=mix(3.3,.85,nightAmount);sun.color.lerpColors(daySun,nightSun,nightAmount);fill.intensity=mix(.65,.6,nightAmount);renderer.toneMappingExposure=mix(1.18,1.12,nightAmount);
+ lanternMaterial.emissiveIntensity=nightAmount*4;lanternLights.forEach((l,i)=>l.intensity=nightAmount*(40+Math.sin(elapsed*2+i)*2));glows.forEach(s=>s.material.opacity=nightAmount*.8);warmWash.intensity=nightAmount*650;pagodaWash.intensity=nightAmount*150;moon.visible=nightAmount>.3;stars.material.opacity=nightAmount*.85;
+ for(let i=0;i<100;i++){particlePos[i*3]+=Math.sin(elapsed*.3+i)*dt*.22;particlePos[i*3+1]-=particleSpeed[i]*dt;if(particlePos[i*3+1]<3)particlePos[i*3+1]=34}pg.attributes.position.needsUpdate=true;particles.material.opacity=mix(.6,.85,nightAmount);$('needle').style.transform=`rotate(${-Math.atan2(camera.position.x-controls.target.x,camera.position.z-controls.target.z)*180/Math.PI}deg)`;renderer.render(scene,camera);
+}
+renderer.render(scene,camera);window.sceneReady=true;clearTimeout(window.loadTimer);$('loading').style.opacity='0';setTimeout(()=>$('loading').style.display='none',650);requestAnimationFrame(animate);
+// Small read-only diagnostics for inspecting a delivered scene in the browser console.
+window.kiyomizu={getState:()=>({walking,nightTarget,nightAmount,position:camera.position.toArray(),rotation:[yaw,pitch],pointerLocked:document.pointerLockElement===canvas,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,canWalk:canWalk(camera.position.x,camera.position.z),quality:lowQuality?'low':'high'})};
+}catch(error){console.error(error);clearTimeout(window.loadTimer);showLoadError('無法啟動 3D 場景。請使用支援 WebGL 2 的新版 Chrome／Edge，確認可連線至 cdn.jsdelivr.net。詳細訊息：'+error.message)}
+</script>
+</body>
+</html>
